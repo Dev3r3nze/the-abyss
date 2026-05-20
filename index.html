@@ -1,1598 +1,501 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Abyss — Campaña </title>
-  <meta name="description" content="The Abyss es un Metroidvania de horror psicológico y gestión de grupo. Apoya nuestra campaña." />
+  <title>The Abyss</title>
+  <meta name="description"
+    content="The Abyss es un Metroidvania de horror psicológico y gestión de grupo. Apoya nuestra campaña." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
-  <style>
-    /*DISEÑO*/
-    :root {
-      --bg:            hsl(230,15%,8%);
-      --bg-card:       hsl(230,12%,12%);
-      --bg-secondary:  hsl(230,10%,16%);
-      --bg-muted:      hsl(230,10%,18%);
-      --fg:            hsl(43,30%,90%);
-      --fg-muted:      hsl(230,10%,55%);
-      --gold:          hsl(43,65%,54%);
-      --gold-light:    hsl(43,65%,70%);
-      --gold-dark:     hsl(43,65%,40%);
-      --border:        hsl(230,10%,20%);
-      --font-cinzel:   'Cinzel', serif;
-      --font-deco:     'Cinzel Decorative', serif;
-      --font-fell:     'IM Fell English', serif;
-      --radius:        0.5rem;
-    }
-
-    /*RESET Y BASE*/
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--fg);
-      font-family: var(--font-fell);
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-    button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
-    ::selection { background: hsla(43,65%,54%,0.3); color: hsl(43,30%,95%); }
-
-    /*HELPERS TIPOGRAFÍA*/
-    .font-cinzel     { font-family: var(--font-cinzel); }
-    .font-deco       { font-family: var(--font-deco); }
-    .font-fell       { font-family: var(--font-fell); }
-    .text-gold       { color: var(--gold); }
-    .text-muted      { color: var(--fg-muted); }
-    .italic          { font-style: italic; }
-
-    /*HELPERS*/
-    .container       { max-width: 72rem; margin-inline: auto; padding-inline: 1.5rem; }
-    .container-sm    { max-width: 48rem; margin-inline: auto; padding-inline: 1.5rem; }
-    .container-md    { max-width: 56rem; margin-inline: auto; padding-inline: 1.5rem; }
-    .section         { padding: 6rem 1.5rem; }
-    .section-alt     { background: hsl(230,12%,10%); }
-    .text-center     { text-align: center; }
-
-    /*SECCIÓN DE TÍTULOS*/
-    .section-title {
-      font-family: var(--font-cinzel);
-      font-size: clamp(1.8rem, 5vw, 3.2rem);
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .section-subtitle {
-      font-family: var(--font-fell);
-      color: var(--fg-muted);
-      text-align: center;
-      font-size: 1.05rem;
-      margin-bottom: 3.5rem;
-    }
-
-    /*ESTILO NAVEGACIÓN*/
-    #navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: hsla(230,15%,8%,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-inner {
-      max-width: 72rem;
-      margin-inline: auto;
-      padding-inline: 1.5rem;
-      height: 4rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-brand {
-      font-family: var(--font-deco);
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--gold);
-      letter-spacing: 0.2em;
-    }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      list-style: none;
-    }
-    .nav-links a {
-      font-family: var(--font-cinzel);
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(237,232,214,0.7);
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-    .nav-cta {
-      font-family: var(--font-cinzel) !important;
-      font-size: 0.65rem !important;
-      letter-spacing: 0.15em !important;
-      text-transform: uppercase !important;
-      padding: 0.5rem 1.25rem;
-      background: var(--gold);
-      color: var(--bg) !important;
-      border-radius: 2px;
-      transition: opacity 0.2s;
-    }
-    .nav-cta:hover { opacity: 0.88; }
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--fg);
-      cursor: pointer;
-    }
-    .nav-mobile {
-      display: none;
-      background: hsla(230,15%,8%,0.96);
-      border-top: 1px solid var(--border);
-      padding: 1rem 1.5rem 1.5rem;
-    }
-    .nav-mobile a {
-      display: block;
-      font-family: var(--font-cinzel);
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(237,232,214,0.7);
-      padding: 0.6rem 0;
-      transition: color 0.2s;
-    }
-    .nav-mobile a:hover, .nav-mobile a.gold { color: var(--gold); }
-    @media (max-width: 767px) {
-      .nav-links { display: none; }
-      .nav-toggle { display: block; }
-    }
-
-    /*ESTILO HERO*/
-    #inicio {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom,
-        hsla(230,15%,8%,0.6) 0%,
-        hsla(230,15%,8%,0.3) 40%,
-        hsl(230,15%,8%) 100%);
-    }
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding-inline: 1.5rem;
-    }
-    .hero-title {
-      font-family: var(--font-deco);
-      font-size: clamp(3rem, 12vw, 8rem);
-      font-weight: 900;
-      color: var(--gold);
-      letter-spacing: 0.15em;
-      margin-bottom: 1rem;
-      animation: fadeUp 1.2s ease-out both;
-    }
-    .hero-tagline {
-      font-family: var(--font-fell);
-      font-style: italic;
-      font-size: clamp(1rem, 3vw, 1.5rem);
-      color: rgba(237,232,214,0.8);
-      margin-bottom: 2.5rem;
-      animation: fadeIn 1s 0.6s ease-out both;
-    }
-    .hero-btn {
-      display: inline-block;
-      font-family: var(--font-cinzel);
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.875rem 2rem;
-      border: 2px solid var(--gold);
-      color: var(--gold);
-      transition: background 0.3s, color 0.3s;
-      animation: fadeUp 0.8s 1s ease-out both;
-    }
-    .hero-btn:hover { background: var(--gold); color: var(--bg); }
-    .hero-disclaimer {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      background: hsla(230,15%,8%,0.9);
-      border-top: 1px solid hsla(230,10%,20%,0.5);
-      padding: 0.5rem 1.5rem;
-      text-align: center;
-    }
-    .hero-disclaimer p {
-      font-family: var(--font-fell);
-      font-size: 0.6rem;
-      color: var(--fg-muted);
-      max-width: 56rem;
-      margin-inline: auto;
-    }
-
-    /*ESTILO BANNER*/
-    #banner { padding: 6rem 1.5rem; }
-    .banner-inner { max-width: 48rem; margin-inline: auto; text-align: center; }
-    .banner-title {
-      font-family: var(--font-cinzel);
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-    }
-    .banner-text {
-      font-family: var(--font-fell);
-      font-size: 1.1rem;
-      color: rgba(237,232,214,0.7);
-      line-height: 1.8;
-    }
-
-    /*ESTILO MAPA*/
-    #mapa { padding: 6rem 1.5rem; }
-    .map-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 4rem;
-    }
-    @media (max-width: 767px) { .map-grid { grid-template-columns: 1fr; } }
-    .map-card {
-      position: relative;
-      border-radius: var(--radius);
-      border: 2px solid var(--border);
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color 0.4s, transform 0.4s, opacity 0.4s;
-      opacity: 0.7;
-    }
-    .map-card.active { border-color: var(--gold); transform: scale(1.02); opacity: 1; }
-    .map-card:hover { border-color: var(--gold); opacity: 1; }
-    .map-placeholder {
-      width: 100%;
-      aspect-ratio: 4/3;
-      background: hsla(230,10%,16%,0.5);
-      border: 1px dashed hsla(230,10%,40%,0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-    .map-placeholder-icon {
-      width: 2rem; height: 2rem;
-      opacity: 0.25;
-    }
-    .map-placeholder span {
-      font-family: var(--font-fell);
-      font-size: 0.7rem;
-      color: var(--fg-muted);
-      opacity: 0.6;
-      font-style: italic;
-    }
-    .map-info {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 1.5rem;
-      background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
-    }
-    .map-info h3 {
-      font-family: var(--font-cinzel);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-    .map-info p {
-      font-family: var(--font-fell);
-      font-size: 0.85rem;
-      color: rgba(237,232,214,0.8);
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.4s, opacity 0.4s;
-    }
-    .map-card.active .map-info p { max-height: 4rem; opacity: 1; }
-
-    /*ESTILO LORE*/
-    #lore { padding: 6rem 1.5rem; }
-    .lore-grid {
-      max-width: 72rem;
-      margin-inline: auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
-    @media (max-width: 767px) { .lore-grid { grid-template-columns: 1fr; } }
-    .lore-label {
-      font-family: var(--font-cinzel);
-      font-size: 0.65rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
-    .lore-title {
-      font-family: var(--font-cinzel);
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-    }
-    .lore-text {
-      font-family: var(--font-fell);
-      color: rgba(237,232,214,0.7);
-      line-height: 1.8;
-      margin-bottom: 1rem;
-    }
-    .lore-text .gold { color: var(--gold); }
-    .lore-img-placeholder {
-      width: 100%;
-      aspect-ratio: 3/2;
-      background: hsla(230,10%,16%,0.3);
-      border: 1px dashed hsla(230,10%,40%,0.5);
-      border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-    .lore-img-placeholder span {
-      font-family: var(--font-fell);
-      font-size: 0.85rem;
-      color: var(--fg-muted);
-      opacity: 0.6;
-      font-style: italic;
-    }
-
-    /*ESTILO MEDIA (Trailer + Audio)*/
-    #campana { padding: 6rem 1.5rem; }
-    .video-placeholder {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: hsla(230,10%,16%,0.3);
-      border: 1px dashed hsla(230,10%,40%,0.5);
-      border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .play-circle {
-      width: 4rem; height: 4rem;
-      border-radius: 50%;
-      border: 2px solid hsla(230,10%,40%,0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .play-icon {
-      width: 0; height: 0;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-left: 18px solid hsla(237,232%,214%,0.25);
-      margin-left: 4px;
-    }
-    .video-placeholder p {
-      font-family: var(--font-fell);
-      font-size: 0.85rem;
-      color: var(--fg-muted);
-      font-style: italic;
-    }
-    .audio-player {
-      border: 1px solid hsla(230,10%,20%,0.8);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      background: var(--bg-card);
-    }
-    .audio-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-    .audio-header .title {
-      font-family: var(--font-cinzel);
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-    .audio-header .time {
-      font-family: var(--font-fell);
-      font-size: 0.75rem;
-      color: var(--fg-muted);
-    }
-    .audio-controls {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .play-btn {
-      width: 2.5rem; height: 2.5rem;
-      border-radius: 50%;
-      background: var(--gold);
-      color: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: opacity 0.2s;
-    }
-    .play-btn:hover { opacity: 0.88; }
-    .play-btn svg { width: 1rem; height: 1rem; fill: var(--bg); }
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      height: 6px;
-      border-radius: 3px;
-      cursor: pointer;
-      outline: none;
-    }
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: var(--gold);
-      cursor: pointer;
-    }
-    input[type="range"]::-moz-range-thumb {
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: var(--gold);
-      border: none;
-      cursor: pointer;
-    }
-    .seek-bar { flex: 1; }
-    .volume-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-shrink: 0;
-    }
-    .volume-wrap svg { width: 0.9rem; height: 0.9rem; color: var(--fg-muted); fill: var(--fg-muted); }
-    .vol-bar { width: 4rem; }
-
-    /*ESTILO ILUSTRACIONES*/
-    #ilustraciones { padding: 6rem 1.5rem; }
-    .illus-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    @media (max-width: 767px) { .illus-grid { grid-template-columns: repeat(2, 1fr); } }
-    .illus-frame {
-      aspect-ratio: 3/4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: hsla(230,10%,16%,0.2);
-      border: 1px dashed hsla(230,10%,40%,0.4);
-      border-radius: var(--radius);
-      gap: 0.5rem;
-      transition: border-color 0.2s;
-    }
-    .illus-frame:hover { border-color: hsla(43,65%,54%,0.4); }
-    .illus-frame svg { width: 1.8rem; height: 1.8rem; opacity: 0.25; }
-    .illus-frame span {
-      font-family: var(--font-fell);
-      font-size: 0.6rem;
-      color: var(--fg-muted);
-      opacity: 0.5;
-      font-style: italic;
-      text-align: center;
-      padding-inline: 0.5rem;
-    }
-    .illus-wide {
-      width: 100%;
-      aspect-ratio: 21/9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: hsla(230,10%,16%,0.2);
-      border: 1px dashed hsla(230,10%,40%,0.4);
-      border-radius: var(--radius);
-      gap: 0.75rem;
-      transition: border-color 0.2s;
-    }
-    .illus-wide:hover { border-color: hsla(43,65%,54%,0.4); }
-    .illus-wide svg { width: 2.5rem; height: 2.5rem; opacity: 0.25; }
-    .illus-wide span {
-      font-family: var(--font-fell);
-      font-size: 0.85rem;
-      color: var(--fg-muted);
-      opacity: 0.5;
-      font-style: italic;
-    }
-
-    /*ESTILO PROGRESO DE RECAUDACIÓN*/
-    #progreso { padding: 6rem 1.5rem; background: hsl(230,12%,10%); }
-    .funding-badges {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 2.5rem;
-    }
-    .funding-badge-inner {
-      display: inline-flex;
-      align-items: center;
-      gap: 1.5rem;
-      border: 1px solid hsla(230,10%,20%,0.7);
-      border-radius: 9999px;
-      padding: 0.75rem 2rem;
-      background: var(--bg-card);
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .badge-item { text-align: center; }
-    .badge-item .val {
-      font-family: var(--font-cinzel);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold);
-      display: block;
-    }
-    .badge-item .val.dim { color: rgba(237,232,214,0.4); }
-    .badge-item .lbl {
-      font-family: var(--font-fell);
-      font-size: 0.65rem;
-      color: var(--fg-muted);
-    }
-    .badge-sep { width: 1px; height: 2rem; background: var(--border); }
-    @media (max-width: 480px) { .badge-sep { display: none; } }
-
-    .progress-wrap { padding-inline: 0.5rem; margin-bottom: 5rem; }
-    .progress-labels-top { position: relative; height: 1.5rem; margin-bottom: 0.25rem; }
-    .progress-labels-top span, .progress-labels-bot span {
-      position: absolute;
-      font-family: var(--font-cinzel);
-      font-size: 0.6rem;
-      font-weight: 700;
-      white-space: nowrap;
-      transform: translateX(-50%);
-    }
-    .progress-labels-bot { position: relative; height: 1.5rem; margin-top: 0.25rem; }
-    .progress-labels-bot span {
-      font-family: var(--font-fell) !important;
-      font-size: 0.6rem !important;
-      font-weight: 400 !important;
-    }
-    .bar-track {
-      position: relative;
-      height: 12px;
-      background: var(--bg-secondary);
-      border-radius: 9999px;
-      cursor: pointer;
-      user-select: none;
-    }
-    .bar-fill {
-      position: absolute;
-      left: 0; top: 0;
-      height: 100%;
-      border-radius: 9999px;
-      background: linear-gradient(to right, hsl(43,65%,40%), hsl(43,65%,62%));
-      pointer-events: none;
-    }
-    .bar-handle {
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 1.25rem; height: 1.25rem;
-      border-radius: 50%;
-      background: var(--gold);
-      border: 2px solid var(--bg);
-      box-shadow: 0 0 12px hsla(43,65%,54%,0.5);
-      cursor: grab;
-      transition: transform 0.1s;
-      z-index: 2;
-    }
-    .bar-handle:active { cursor: grabbing; transform: translate(-50%, -50%) scale(1.25); }
-    .bar-tick {
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 2px;
-      height: 20px;
-      pointer-events: none;
-    }
-
-    .milestone-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-    @media (max-width: 767px) { .milestone-grid { grid-template-columns: repeat(2, 1fr); } }
-    .milestone-card {
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      border: 1px solid hsla(230,10%,20%,0.3);
-      background: var(--bg-card);
-      opacity: 0.6;
-      transition: all 0.5s;
-    }
-    .milestone-card.unlocked { border-color: var(--gold); background: hsla(43,65%,54%,0.05); opacity: 1; }
-    .milestone-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.75rem;
-    }
-    .milestone-card-top .amount {
-      font-family: var(--font-cinzel);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--fg-muted);
-    }
-    .milestone-card.unlocked .amount { color: var(--gold); }
-    .milestone-card h3 {
-      font-family: var(--font-cinzel);
-      font-size: 0.7rem;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-      color: var(--fg-muted);
-    }
-    .milestone-card.unlocked h3 { color: var(--fg); }
-    .milestone-card p {
-      font-family: var(--font-fell);
-      font-size: 0.75rem;
-      line-height: 1.5;
-      color: var(--fg-muted);
-      opacity: 0.5;
-    }
-    .milestone-card.unlocked p { opacity: 0.75; }
-    .lock-icon, .unlock-icon {
-      width: 0.875rem; height: 0.875rem;
-    }
-    .lock-icon { color: hsla(230,10%,55%,0.5); }
-    .unlock-icon { color: var(--gold); }
-
-    .funding-cta { text-align: center; margin-top: 2.5rem; }
-    .btn-primary {
-      display: inline-block;
-      font-family: var(--font-cinzel);
-      font-size: 0.8rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.875rem 2rem;
-      background: var(--gold);
-      color: var(--bg);
-      border-radius: 2px;
-      transition: opacity 0.2s;
-    }
-    .btn-primary:hover { opacity: 0.88; }
-    .btn-outline {
-      display: inline-block;
-      font-family: var(--font-cinzel);
-      font-size: 0.8rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.75rem 2rem;
-      border: 1px solid hsla(43,65%,54%,0.5);
-      color: var(--gold);
-      border-radius: 2px;
-      transition: background 0.2s;
-    }
-    .btn-outline:hover { background: hsla(43,65%,54%,0.1); }
-
-    /*ESTILO CONTRIBUCIONES*/
-    #apoyar { padding: 6rem 1.5rem; }
-    .tiers-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      max-width: 64rem;
-      margin-inline: auto;
-    }
-    @media (max-width: 767px) { .tiers-grid { grid-template-columns: 1fr; } }
-    .tier-card {
-      position: relative;
-      border-radius: var(--radius);
-      padding: 2rem;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      transition: transform 0.3s;
-    }
-    .tier-card:hover { transform: scale(1.02); }
-    .tier-card.featured {
-      border-color: var(--gold);
-      background: hsla(43,65%,54%,0.05);
-      box-shadow: 0 0 32px hsla(43,65%,54%,0.1);
-    }
-    .tier-badge {
-      position: absolute;
-      top: -0.75rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--gold);
-      color: var(--bg);
-      font-family: var(--font-cinzel);
-      font-size: 0.55rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.25rem 1rem;
-      border-radius: 9999px;
-    }
-    .tier-price {
-      font-family: var(--font-cinzel);
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--gold);
-      display: block;
-    }
-    .tier-name {
-      font-family: var(--font-cinzel);
-      font-size: 1rem;
-      font-weight: 700;
-      margin-top: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .tier-perks { list-style: none; margin-bottom: 2rem; }
-    .tier-perks li {
-      font-family: var(--font-fell);
-      font-size: 0.875rem;
-      color: rgba(237,232,214,0.7);
-      padding: 0.5rem 0;
-      display: flex;
-      gap: 0.5rem;
-    }
-    .tier-perks li::before { content: '✦'; color: var(--gold); flex-shrink: 0; margin-top: 0.1rem; }
-
-    /*ESTILO OBJETIVOS*/
-    #objetivos { padding: 6rem 1.5rem; background: hsl(230,12%,10%); }
-    .obj-list { max-width: 52rem; margin-inline: auto; }
-    .obj-item {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      padding: 1.5rem;
-      border-left: 2px solid hsla(43,65%,54%,0.3);
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .obj-item:hover { border-left-color: var(--gold); background: hsla(230,10%,16%,0.3); }
-    .obj-amount {
-      font-family: var(--font-cinzel);
-      font-size: clamp(1.2rem, 3vw, 1.8rem);
-      font-weight: 700;
-      color: var(--gold);
-      min-width: 6rem;
-    }
-    .obj-item h3 {
-      font-family: var(--font-cinzel);
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-    }
-    .obj-item p { font-family: var(--font-fell); font-size: 0.85rem; color: var(--fg-muted); }
-
-    /*ESTILO EQUIPO*/
-    #equipo { padding: 6rem 1.5rem; }
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1.5rem;
-      max-width: 52rem;
-      margin-inline: auto;
-      margin-top: 4rem;
-    }
-    @media (max-width: 767px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
-    .team-card { text-align: center; }
-    .team-avatar {
-      width: 4rem; height: 4rem;
-      border-radius: 50%;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-inline: auto;
-      margin-bottom: 1rem;
-    }
-    .team-avatar span {
-      font-family: var(--font-cinzel);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--gold);
-    }
-    .team-card h3 {
-      font-family: var(--font-cinzel);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 0.25rem;
-    }
-    .team-card p { font-family: var(--font-fell); font-size: 0.75rem; color: var(--fg-muted); }
-
-    /*ESTILO FAQ*/
-    #faq { padding: 6rem 1.5rem; background: hsl(230,12%,10%); }
-    .faq-list { max-width: 42rem; margin-inline: auto; }
-    .faq-item {
-      border: 1px solid hsla(230,10%,20%,0.5);
-      border-radius: var(--radius);
-      background: hsla(230,12%,12%,0.5);
-      margin-bottom: 0.5rem;
-      overflow: hidden;
-    }
-    .faq-trigger {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.1rem 1.5rem;
-      font-family: var(--font-cinzel);
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-      text-align: left;
-      color: var(--fg);
-      transition: color 0.2s;
-    }
-    .faq-trigger:hover { color: var(--gold); }
-    .faq-chevron {
-      width: 1rem; height: 1rem;
-      flex-shrink: 0;
-      transition: transform 0.3s;
-      color: var(--fg-muted);
-    }
-    .faq-item.open .faq-chevron { transform: rotate(180deg); }
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.35s ease, padding 0.35s ease;
-    }
-    .faq-item.open .faq-answer { max-height: 10rem; padding-bottom: 1rem; }
-    .faq-answer p {
-      font-family: var(--font-fell);
-      font-size: 0.9rem;
-      color: var(--fg-muted);
-      line-height: 1.7;
-      padding-inline: 1.5rem;
-    }
-
-    /*ESTILO COMENTARIOS*/
-    #comentarios { padding: 6rem 1.5rem; }
-    .comment-form {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      background: var(--bg-card);
-      margin-bottom: 2rem;
-    }
-    .comment-form h3 {
-      font-family: var(--font-cinzel);
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-    .form-field {
-      width: 100%;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 0.75rem 1rem;
-      font-family: var(--font-fell);
-      font-size: 0.875rem;
-      color: var(--fg);
-      outline: none;
-      margin-bottom: 0.75rem;
-      transition: border-color 0.2s;
-    }
-    .form-field:focus { border-color: var(--gold); }
-    .form-field::placeholder { color: var(--fg-muted); }
-    select.form-field option { background: var(--bg-card); }
-    textarea.form-field { resize: none; min-height: 5rem; }
-    .comment-card {
-      border: 1px solid hsla(230,10%,20%,0.5);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      background: var(--bg-card);
-      margin-bottom: 0.75rem;
-    }
-    .comment-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-    }
-    .comment-card-top .name {
-      font-family: var(--font-cinzel);
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-    .comment-card-top .stars { color: var(--gold); font-size: 0.85rem; }
-    .comment-card blockquote {
-      font-family: var(--font-fell);
-      font-size: 0.875rem;
-      color: rgba(237,232,214,0.7);
-      font-style: italic;
-    }
-
-    /*FOOTER*/
-    footer {
-      border-top: 1px solid hsla(230,10%,20%,0.5);
-      padding: 3rem 1.5rem;
-      text-align: center;
-    }
-    .footer-brand {
-      font-family: var(--font-deco);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold);
-      letter-spacing: 0.2em;
-      display: block;
-      margin-bottom: 1.5rem;
-    }
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      list-style: none;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .footer-links a {
-      font-family: var(--font-cinzel);
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--fg-muted);
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--gold); }
-    footer p {
-      font-family: var(--font-fell);
-      font-size: 0.75rem;
-      color: var(--fg-muted);
-      margin-bottom: 0.5rem;
-    }
-    footer small {
-      font-family: var(--font-fell);
-      font-size: 0.6rem;
-      color: hsla(230,10%,55%,0.6);
-      max-width: 36rem;
-      display: block;
-      margin-inline: auto;
-      line-height: 1.6;
-    }
-
-    /*ANIMACIONES*/
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible { opacity: 1; transform: none; }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
-  </style>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&family=IM+Fell+English:ital@0;1&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="global.css" />
 </head>
-<body>
 
-<!--NAVEGADOR -->
-<nav id="navbar">
-  <div class="nav-inner">
-    <a href="#inicio" class="nav-brand">THE ABYSS</a>
-    <ul class="nav-links">
+<body>
+  <!--NAVEGADOR -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#inicio" class="nav-brand">THE ABYSS</a>
+      <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#campana">Campaña</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#comentarios">Comentarios</a></li>
+        <li><a href="#apoyar" class="nav-cta">Apoyar</a></li>
+      </ul>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Menú">
+        <svg id="icon-menu" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+        <svg id="icon-close" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24" style="display:none">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="nav-mobile" id="nav-mobile">
+      <a href="#inicio" onclick="closeMenu()">Inicio</a>
+      <a href="#campana" onclick="closeMenu()">Campaña</a>
+      <a href="#faq" onclick="closeMenu()">FAQ</a>
+      <a href="#comentarios" onclick="closeMenu()">Comentarios</a>
+      <a href="#apoyar" onclick="closeMenu()" class="gold">Apoyar</a>
+    </div>
+  </nav>
+
+  <!--HERO-->
+  <section id="inicio">
+    <img class="hero-bg"
+      src="assets/hero.png"
+      alt="The Abyss" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">THE ABYSS</h1>
+      <p class="hero-tagline">Don't Stare Too Long</p>
+      <a href="#apoyar" class="hero-btn">Apoyar el proyecto</a>
+    </div>
+    <div class="hero-disclaimer">
+      <p>ATENCIÓN: Campaña ficticia de un videojuego simulado. Práctica de Multimedia, 1º GDDV. Curso 25/26 (Móstoles),
+        URJC. La URJC no se hace responsable del contenido.</p>
+    </div>
+  </section>
+
+  <!--BANNER-->
+  <section id="banner">
+    <div class="banner-inner reveal">
+      <h2 class="banner-title">¿Qué es <span class="text-gold">The Abyss</span>?</h2>
+      <p class="banner-text">
+        Un <span class="text-gold">Metroidvania</span> de horror psicológico y gestión de grupo.
+        El mapa se degrada a medida que la filosofía de tus personajes sucumbe ante la desesperación.
+      </p>
+    </div>
+  </section>
+
+  <!--MAPA-->
+  <section id="mapa" class="section-alt" style="padding:6rem 1.5rem;">
+    <div class="container">
+      <h2 class="section-title reveal">Adéntrate</h2>
+      <div class="map-grid">
+        <div class="map-card active reveal reveal-delay-1" data-idx="0" onclick="activateMap(0)">
+          <!-- <div class="map-placeholder">
+            <svg class="map-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M3 9h18M9 21V9" />
+            </svg>
+          </div> -->
+          <img src="assets/map1.png" alt="Mapa La Superficie" class="map-placeholder" />
+          <div class="map-info">
+            <h3>La Superficie</h3>
+            <p>La primera capa. La luz aún llega desde arriba. Pero algo acecha en las sombras.</p>
+          </div>
+        </div>
+        <div class="map-card reveal reveal-delay-2" data-idx="1" onclick="activateMap(1)">
+          <img src="assets/map2.png" alt="Mapa El Abismo" class="map-placeholder" />
+          <div class="map-info">
+            <h3>El Abismo</h3>
+            <p>Más profundo. Las reglas cambian. Los personajes también.</p>
+          </div>
+        </div>
+        <div class="map-card reveal reveal-delay-3" data-idx="2" onclick="activateMap(2)">
+          <img src="assets/map3.png" alt="Mapa El Fondo" class="map-placeholder" />
+          <div class="map-info">
+            <h3>El Fondo</h3>
+            <p>El origen de todo. Nadie ha llegado hasta aquí y contado lo que vio.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--LORE-->
+  <section id="lore" style="padding:6rem 1.5rem;">
+    <div class="lore-grid">
+      <div class="reveal">
+        <p class="lore-label">Crónica del descenso</p>
+        <h2 class="lore-title">El Juego</h2>
+        <p class="lore-text">
+          Un grupo de aventureros se adentra en una mazmorra que subestiman.
+          Lo que encuentran dentro cambiará todo lo que creían saber.
+        </p>
+        <p class="lore-text">
+          Cada personaje porta una <span class="gold">corriente filosófica</span> única (
+          Existencialismo, Nihilismo, Estoicismo, Racionalismo…) que define sus habilidades
+          y su manera de enfrentarse al caos.
+        </p>
+        <p class="lore-text italic" style="opacity:0.6;">¿Podrán escapar? ¿O el abismo los cambiará para siempre?</p>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <!-- <div class="lore-img-placeholder">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            style="opacity:0.3">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg>
+        </div> -->
+        <img src="assets/Escenario_1.png" alt="Lore" class="lore-img" />
+      </div>
+    </div>
+  </section>
+
+  <!--MEDIA-->
+  <section id="campana" style="padding:6rem 1.5rem; background:hsl(230,12%,10%);">
+    <div class="container-sm">
+      <h2 class="section-title reveal">Trailer y Banda Sonora</h2>
+      <p class="section-subtitle reveal">Sumergete en la atmosfera del abismo</p>
+
+      <div class="video-placeholder reveal">
+        <!-- <div class="play-circle">
+          <div class="play-icon"></div>
+        </div> -->
+        <video controls class="video-el">
+          <source src="assets/trailer.mp4" type="video/mp4" />
+          Tu navegador no soporta la reproducción de video.
+          </video>
+      </div>
+
+      <div class="audio-player reveal">
+        <div class="audio-header">
+          <span class="title">Banda Sonora Oficial</span>
+          <span class="time" id="audio-time">00:00 / 00:00</span>
+        </div>
+        <div class="audio-controls">
+          <button class="play-btn" id="play-btn" onclick="toggleAudio()">
+            <svg id="play-icon" viewBox="0 0 24 24">
+              <polygon points="5,3 19,12 5,21" />
+            </svg>
+            <svg id="pause-icon" viewBox="0 0 24 24" style="display:none">
+              <rect x="6" y="4" width="4" height="16" />
+              <rect x="14" y="4" width="4" height="16" />
+            </svg>
+          </button>
+          <input type="range" class="seek-bar" id="seek-bar" min="0" max="100" step="0.1" value="0"
+            oninput="seekAudio(this.value)" />
+          <div class="volume-wrap">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11 5 6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+            <input type="range" class="vol-bar" id="vol-bar" min="0" max="1" step="0.01" value="1"
+              oninput="setVolume(this.value)" />
+          </div>
+        </div>
+        <audio id="audio-el">
+          <source src="assets/mainTheme.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+    </div>
+  </section>
+
+  <!--ILUSTRACIONES-->
+  <section id="ilustraciones" style="padding:6rem 1.5rem;">
+    <div class="container">
+      <h2 class="section-title reveal">Ilustraciones</h2>
+      <p class="section-subtitle reveal">Arte conceptual del mundo de The Abyss</p>
+
+      <div class="illus-grid">
+        <div class="illus-frame reveal reveal-delay-1">
+          <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg> -->
+          <img src="assets/Absurdismo.png" alt="Ilustración 1" class="illus-img" />
+        </div>
+        <div class="illus-frame reveal reveal-delay-2">
+          <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg> -->
+          <img src="assets/Existencialismo.png" alt="Ilustración 2" class="illus-img" />
+        </div>
+        <div class="illus-frame reveal reveal-delay-3">
+          <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg> -->
+          <img src="assets/Dualismo.png" alt="Ilustración 3" class="illus-img" />
+        </div>
+        <div class="illus-frame reveal reveal-delay-4">
+          <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg> -->
+          <img src="assets/Nihilismo.png" alt="Ilustración 4" class="illus-img" />
+        </div>
+        <div class="illus-frame reveal reveal-delay-1">
+          <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg> -->
+          <img src="assets/Estoicismo.png" alt="Ilustración 5" class="illus-img" />
+        </div>
+        <div class="illus-frame reveal reveal-delay-2">
+          <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg> -->
+          <img src="assets/Determinismo.png" alt="Ilustración 6" class="illus-img" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--PROGRESO DE RECAUDACIÓN-->
+  <section id="progreso">
+    <div class="container-md">
+      <h2 class="section-title reveal">Campaña</h2>
+      <p class="section-subtitle reveal">Cada apoyo nos acerca un paso más al abismo</p>
+
+      <div class="funding-badges reveal">
+        <div class="funding-badge-inner">
+          <div class="badge-item"><span class="val" id="badge-raised">847€</span><span class="lbl">recaudados</span>
+          </div>
+          <div class="badge-sep"></div>
+          <div class="badge-item"><span class="val">23</span><span class="lbl">mecenas</span></div>
+          <div class="badge-sep"></div>
+          <div class="badge-item"><span class="val dim">40.000€</span><span class="lbl">objetivo</span></div>
+          <div class="badge-sep"></div>
+          <div class="badge-item"><span class="val dim">42</span><span class="lbl">días</span></div>
+        </div>
+      </div>
+
+      <div class="progress-wrap reveal" id="progress-wrap">
+        <div class="progress-labels-top" id="labels-top"></div>
+
+        <div class="bar-track" id="bar-track">
+          <div class="bar-fill" id="bar-fill"></div>
+          <div class="bar-handle" id="bar-handle"></div>
+        </div>
+
+        <div class="progress-labels-bot" id="labels-bot"></div>
+      </div>
+
+      <div class="milestone-grid" id="milestone-grid"></div>
+
+      <div class="funding-cta reveal"><a href="#apoyar" class="btn-primary">Apoyar ahora</a></div>
+    </div>
+  </section>
+
+  <!--CONTRIBUCIONES-->
+  <section id="apoyar" style="padding:6rem 1.5rem;">
+    <div class="container">
+      <h2 class="section-title reveal">Contribuciones</h2>
+      <p class="section-subtitle reveal">Elige cómo apoyar</p>
+      <div class="tiers-grid">
+        <div class="tier-card reveal reveal-delay-1">
+          <span class="tier-price">7€</span>
+          <h3 class="tier-name">Filósofo Primerizo</h3>
+          <ul class="tier-perks">
+            <li>Copia digital en Steam / Itch.io</li>
+            <li>Tu nombre en los créditos</li>
+          </ul>
+          <a href="#" class="btn-outline" style="display:block;text-align:center;">Seleccionar</a>
+        </div>
+        <div class="tier-card featured reveal reveal-delay-2">
+          <div class="tier-badge">Popular</div>
+          <span class="tier-price">16€</span>
+          <h3 class="tier-name">Arquitecto del Nihilismo</h3>
+          <ul class="tier-perks">
+            <li>Copia del juego</li>
+            <li>Banda Sonora Digital</li>
+            <li>Artbook digital</li>
+          </ul>
+          <a href="#" class="btn-primary" style="display:block;text-align:center;">Seleccionar</a>
+        </div>
+        <div class="tier-card reveal reveal-delay-3">
+          <span class="tier-price">35€</span>
+          <h3 class="tier-name">Pack Eternidad</h3>
+          <ul class="tier-perks">
+            <li>Todo lo anterior</li>
+            <li>Acceso a la Beta cerrada</li>
+            <li>Un NPC diseñado por ti en el juego</li>
+          </ul>
+          <a href="#" class="btn-outline" style="display:block;text-align:center;">Seleccionar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--OBJETIVOS-->
+  <section id="objetivos">
+    <div class="container-md">
+      <h2 class="section-title reveal">Objetivos</h2>
+      <div class="obj-list">
+        <div class="obj-item reveal reveal-delay-1">
+          <span class="obj-amount">5.000€</span>
+          <div>
+            <h3>Meta mínima</h3>
+            <p>Tasa de Steam (100€) + localización profesional al inglés (2.500€) + QA/testing externo (800€) + tráiler
+              de lanzamiento freelance (1.500€).</p>
+          </div>
+        </div>
+        <div class="obj-item reveal reveal-delay-2">
+          <span class="obj-amount">10.000€</span>
+          <div>
+            <h3>Doblaje</h3>
+            <p>Contratación de actores de voz para cutscenes y vídeos promocionales (200€/h actor + 500€/h estudio de
+              grabación).</p>
+          </div>
+        </div>
+        <div class="obj-item reveal reveal-delay-3">
+          <span class="obj-amount">25.000€</span>
+          <div>
+            <h3>Nintendo Switch</h3>
+            <p>Cuenta de desarrollador Nintendo (~3.000€/año) + porteo técnico (100-300 h a 40€/h). PlayStation se
+              contempla para el futuro.</p>
+          </div>
+        </div>
+        <div class="obj-item reveal reveal-delay-4">
+          <span class="obj-amount">40.000€</span>
+          <div>
+            <h3>Capítulo extra + PlayStation</h3>
+            <p>2.º final jugable, 30 min post-créditos, nueva localización, composición musical adicional y port a PS5.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--EQUIPO-->
+  <section id="equipo" style="padding:6rem 1.5rem; background:hsl(230,12%,10%);">
+    <div class="container text-center">
+      <h2 class="section-title reveal">El Equipo</h2>
+      <p class="section-subtitle reveal">Zahal Estudios · URJC 2025-26</p>
+      <div class="team-grid">
+        <div class="team-card reveal reveal-delay-1">
+          <div class="team-avatar"><span>HL</span></div>
+          <h3>Hugo Lázaro Gandul</h3>
+          <p>Diseño web</p>
+        </div>
+        <div class="team-card reveal reveal-delay-2">
+          <div class="team-avatar"><span>AL</span></div>
+          <h3>Alejandro López Corpas</h3>
+          <p>Diseño web y Historia</p>
+        </div>
+        <div class="team-card reveal reveal-delay-3">
+          <div class="team-avatar"><span>ZR</span></div>
+          <h3>Zaira Ramírez Gómez</h3>
+          <p>Ilustración y Animación</p>
+        </div>
+        <div class="team-card reveal reveal-delay-4">
+          <div class="team-avatar"><span>LF</span></div>
+          <h3>Lorena Fernández Alves</h3>
+          <p>Campaña y Ilustración</p>
+        </div>
+        <div class="team-card reveal reveal-delay-4">
+          <div class="team-avatar"><span>AC</span></div>
+          <h3>Alberto Corpas Salgado</h3>
+          <p>Presentación</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--FAQ-->
+  <section id="faq" style="padding:6rem 1.5rem;">
+    <div class="container-sm">
+      <h2 class="section-title reveal">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item reveal reveal-delay-1">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            ¿Cuándo estará disponible?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>Lanzamiento estimado en septiembre 2026 para PC. Demo funcional para mecenas en junio 2026.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal reveal-delay-2">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            ¿Hace falta saber filosofía?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>Para nada. La filosofía se integra naturalmente en los personajes y mecánicas. El juego lo explica todo.
+            </p>
+          </div>
+        </div>
+        <div class="faq-item reveal reveal-delay-3">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            ¿Qué pasa si no se alcanza el objetivo?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>Todos los patrocinadores reciben reembolso. No se cobra hasta que la campaña concluya con éxito.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal reveal-delay-4">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            ¿En qué plataformas saldrá?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>PC (Steam y GOG) confirmado. Según financiación: Nintendo Switch, PlayStation y Xbox.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--COMENTARIOS-->
+  <section id="comentarios" style="padding:6rem 1.5rem; background:hsl(230,12%,10%);">
+    <div class="container-sm">
+      <h2 class="section-title reveal">Comentarios</h2>
+
+      <div class="comment-form reveal">
+        <h3>Deja tu reseña</h3>
+        <input type="text" class="form-field" id="c-nombre" placeholder="Nombre o Alias" />
+        <select class="form-field" id="c-puntos">
+          <option value="5">★★★★★</option>
+          <option value="4">★★★★☆</option>
+          <option value="3">★★★☆☆</option>
+          <option value="2">★★☆☆☆</option>
+          <option value="1">★☆☆☆☆</option>
+        </select>
+        <textarea class="form-field" id="c-mensaje" placeholder="Escribe tu mensaje..."></textarea>
+        <button class="btn-primary" onclick="submitComment()">Enviar</button>
+      </div>
+
+      <div id="comments-list"></div>
+    </div>
+  </section>
+
+  <!--FOOTER-->
+  <footer>
+    <span class="footer-brand">THE ABYSS</span>
+    <ul class="footer-links">
       <li><a href="#inicio">Inicio</a></li>
       <li><a href="#campana">Campaña</a></li>
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#comentarios">Comentarios</a></li>
-      <li><a href="#apoyar" class="nav-cta">Apoyar</a></li>
     </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Menú">
-      <svg id="icon-menu" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      <svg id="icon-close" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
-  <div class="nav-mobile" id="nav-mobile">
-    <a href="#inicio"      onclick="closeMenu()">Inicio</a>
-    <a href="#campana"     onclick="closeMenu()">Campaña</a>
-    <a href="#faq"         onclick="closeMenu()">FAQ</a>
-    <a href="#comentarios" onclick="closeMenu()">Comentarios</a>
-    <a href="#apoyar"      onclick="closeMenu()" class="gold">Apoyar</a>
-  </div>
-</nav>
-
-<!--HERO-->
-<section id="inicio">
-  <img class="hero-bg" src="https://media.base44.com/images/public/6a0c99fc11cc6a7b57a3395b/2f2129d38_generated_deaa03d9.png" alt="The Abyss" />
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1 class="hero-title">THE ABYSS</h1>
-    <p class="hero-tagline">Don't Stare Too Long</p>
-    <a href="#apoyar" class="hero-btn">Apoyar el proyecto</a>
-  </div>
-  <div class="hero-disclaimer">
-    <p>ATENCIÓN: Campaña ficticia de un videojuego simulado. Práctica de Multimedia, 1º GDDV — Curso 25/26 (Móstoles), URJC. La URJC no se hace responsable del contenido.</p>
-  </div>
-</section>
-
-<!--BANNER-->
-<section id="banner">
-  <div class="banner-inner reveal">
-    <h2 class="banner-title">¿Qué es <span class="text-gold">The Abyss</span>?</h2>
-    <p class="banner-text">
-      Un <span class="text-gold">Metroidvania</span> de horror psicológico y gestión de grupo.
-      El mapa se degrada a medida que la filosofía de tus personajes sucumbe ante la desesperación.
-    </p>
-  </div>
-</section>
-
-<!--MAPA-->
-<section id="mapa" class="section-alt" style="padding:6rem 1.5rem;">
-  <div class="container">
-    <h2 class="section-title reveal">Adéntrate</h2>
-    <div class="map-grid">
-      <div class="map-card active reveal reveal-delay-1" data-idx="0" onclick="activateMap(0)">
-        <div class="map-placeholder">
-          <svg class="map-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        </div>
-        <div class="map-info">
-          <h3>La Superficie</h3>
-          <p>La primera capa. La luz aún llega desde arriba. Pero algo acecha en las sombras.</p>
-        </div>
-      </div>
-      <div class="map-card reveal reveal-delay-2" data-idx="1" onclick="activateMap(1)">
-        <div class="map-placeholder">
-          <svg class="map-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        </div>
-        <div class="map-info">
-          <h3>El Abismo</h3>
-          <p>Más profundo. Las reglas cambian. Los personajes también.</p>
-        </div>
-      </div>
-      <div class="map-card reveal reveal-delay-3" data-idx="2" onclick="activateMap(2)">
-        <div class="map-placeholder">
-          <svg class="map-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        </div>
-        <div class="map-info">
-          <h3>El Fondo</h3>
-          <p>El origen de todo. Nadie ha llegado hasta aquí y contado lo que vio.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!--LORE-->
-<section id="lore" style="padding:6rem 1.5rem;">
-  <div class="lore-grid">
-    <div class="reveal">
-      <p class="lore-label">Crónica del descenso</p>
-      <h2 class="lore-title">El Juego</h2>
-      <p class="lore-text">
-        Un grupo de aventureros se adentra en una mazmorra que subestiman.
-        Lo que encuentran dentro cambiará todo lo que creían saber.
-      </p>
-      <p class="lore-text">
-        Cada personaje porta una <span class="gold">corriente filosófica</span> única —
-        Existencialismo, Nihilismo, Estoicismo, Racionalismo… — que define sus habilidades
-        y su manera de enfrentarse al caos.
-      </p>
-      <p class="lore-text italic" style="opacity:0.6;">¿Podrán escapar? ¿O el abismo los cambiará para siempre?</p>
-    </div>
-    <div class="reveal reveal-delay-2">
-      <div class="lore-img-placeholder">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!--MEDIA-->
-<section id="campana" style="padding:6rem 1.5rem; background:hsl(230,12%,10%);">
-  <div class="container-sm">
-    <h2 class="section-title reveal">Trailer y Banda Sonora</h2>
-    <p class="section-subtitle reveal">Sumergete en la atmosfera del abismo</p>
-
-    <div class="video-placeholder reveal">
-      <div class="play-circle"><div class="play-icon"></div></div>
-    </div>
-
-    <div class="audio-player reveal">
-      <div class="audio-header">
-        <span class="title">Banda Sonora Oficial</span>
-        <span class="time" id="audio-time">00:00 / 00:00</span>
-      </div>
-      <div class="audio-controls">
-        <button class="play-btn" id="play-btn" onclick="toggleAudio()">
-          <svg id="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-          <svg id="pause-icon" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-        </button>
-        <input type="range" class="seek-bar" id="seek-bar" min="0" max="100" step="0.1" value="0" oninput="seekAudio(this.value)" />
-        <div class="volume-wrap">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 5 6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-          <input type="range" class="vol-bar" id="vol-bar" min="0" max="1" step="0.01" value="1" oninput="setVolume(this.value)" />
-        </div>
-      </div>
-      <audio id="audio-el">
-        <source src="multi.mp3" type="audio/mpeg" />
-      </audio>
-    </div>
-  </div>
-</section>
-
-<!--ILUSTRACIONES-->
-<section id="ilustraciones" style="padding:6rem 1.5rem;">
-  <div class="container">
-    <h2 class="section-title reveal">Ilustraciones</h2>
-    <p class="section-subtitle reveal">Arte conceptual del mundo de The Abyss</p>
-
-    <div class="illus-grid">
-      <div class="illus-frame reveal reveal-delay-1">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-      </div>
-      <div class="illus-frame reveal reveal-delay-2">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-      </div>
-      <div class="illus-frame reveal reveal-delay-3">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-      </div>
-      <div class="illus-frame reveal reveal-delay-4">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-      </div>
-    </div>
-
-    <div class="illus-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 1rem;">
-      <div class="illus-frame reveal reveal-delay-1">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-      </div>
-      <div class="illus-frame reveal reveal-delay-2">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!--PROGRESO DE RECAUDACIÓN-->
-<section id="progreso">
-  <div class="container-md">
-    <h2 class="section-title reveal">Campaña</h2>
-    <p class="section-subtitle reveal">Cada apoyo nos acerca un paso más al abismo</p>
-
-    <div class="funding-badges reveal">
-      <div class="funding-badge-inner">
-        <div class="badge-item"><span class="val" id="badge-raised">847€</span><span class="lbl">recaudados</span></div>
-        <div class="badge-sep"></div>
-        <div class="badge-item"><span class="val">23</span><span class="lbl">mecenas</span></div>
-        <div class="badge-sep"></div>
-        <div class="badge-item"><span class="val dim">40.000€</span><span class="lbl">objetivo</span></div>
-        <div class="badge-sep"></div>
-        <div class="badge-item"><span class="val dim">42</span><span class="lbl">días</span></div>
-      </div>
-    </div>
-
-    <div class="progress-wrap reveal" id="progress-wrap">
-      <div class="progress-labels-top" id="labels-top"></div>
-
-      <div class="bar-track" id="bar-track">
-        <div class="bar-fill" id="bar-fill"></div>
-        <div class="bar-handle" id="bar-handle"></div>
-      </div>
-
-      <div class="progress-labels-bot" id="labels-bot"></div>
-    </div>
-
-    <div class="milestone-grid" id="milestone-grid"></div>
-
-    <div class="funding-cta reveal"><a href="#apoyar" class="btn-primary">Apoyar ahora</a></div>
-  </div>
-</section>
-
-<!--CONTRIBUCIONES-->
-<section id="apoyar" style="padding:6rem 1.5rem;">
-  <div class="container">
-    <h2 class="section-title reveal">Contribuciones</h2>
-    <p class="section-subtitle reveal">Elige cómo apoyar</p>
-    <div class="tiers-grid">
-      <div class="tier-card reveal reveal-delay-1">
-        <span class="tier-price">7€</span>
-        <h3 class="tier-name">Filósofo Primerizo</h3>
-        <ul class="tier-perks">
-          <li>Copia digital en Steam / Itch.io</li>
-          <li>Tu nombre en los créditos</li>
-        </ul>
-        <a href="#" class="btn-outline" style="display:block;text-align:center;">Seleccionar</a>
-      </div>
-      <div class="tier-card featured reveal reveal-delay-2">
-        <div class="tier-badge">Popular</div>
-        <span class="tier-price">16€</span>
-        <h3 class="tier-name">Arquitecto del Nihilismo</h3>
-        <ul class="tier-perks">
-          <li>Copia del juego</li>
-          <li>Banda Sonora Digital</li>
-          <li>Artbook digital</li>
-        </ul>
-        <a href="#" class="btn-primary" style="display:block;text-align:center;">Seleccionar</a>
-      </div>
-      <div class="tier-card reveal reveal-delay-3">
-        <span class="tier-price">35€</span>
-        <h3 class="tier-name">Pack Eternidad</h3>
-        <ul class="tier-perks">
-          <li>Todo lo anterior</li>
-          <li>Acceso a la Beta cerrada</li>
-          <li>Un NPC diseñado por ti en el juego</li>
-        </ul>
-        <a href="#" class="btn-outline" style="display:block;text-align:center;">Seleccionar</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!--OBJETIVOS-->
-<section id="objetivos">
-  <div class="container-md">
-    <h2 class="section-title reveal">Objetivos</h2>
-    <div class="obj-list">
-      <div class="obj-item reveal reveal-delay-1">
-        <span class="obj-amount">5.000€</span>
-        <div><h3>Meta mínima</h3><p>Tasa de Steam (100€) + localización profesional al inglés (2.500€) + QA/testing externo (800€) + tráiler de lanzamiento freelance (1.500€).</p></div>
-      </div>
-      <div class="obj-item reveal reveal-delay-2">
-        <span class="obj-amount">10.000€</span>
-        <div><h3>Doblaje</h3><p>Contratación de actores de voz para cutscenes y vídeos promocionales (200€/h actor + 500€/h estudio de grabación).</p></div>
-      </div>
-      <div class="obj-item reveal reveal-delay-3">
-        <span class="obj-amount">25.000€</span>
-        <div><h3>Nintendo Switch</h3><p>Cuenta de desarrollador Nintendo (~3.000€/año) + porteo técnico (100-300 h a 40€/h). PlayStation se contempla para el futuro.</p></div>
-      </div>
-      <div class="obj-item reveal reveal-delay-4">
-        <span class="obj-amount">40.000€</span>
-        <div><h3>Capítulo extra + PlayStation</h3><p>2.º final jugable, 30 min post-créditos, nueva localización, composición musical adicional y port a PS5.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!--EQUIPO-->
-<section id="equipo" style="padding:6rem 1.5rem; background:hsl(230,12%,10%);">
-  <div class="container text-center">
-    <h2 class="section-title reveal">El Equipo</h2>
-    <p class="section-subtitle reveal">Zahal Estudios · URJC 2025-26</p>
-    <div class="team-grid">
-      <div class="team-card reveal reveal-delay-1">
-        <div class="team-avatar"><span>HL</span></div>
-        <h3>Hugo Lázaro Gandul</h3><p>Diseño web</p>
-      </div>
-      <div class="team-card reveal reveal-delay-2">
-        <div class="team-avatar"><span>AL</span></div>
-        <h3>Alejandro López Corpas</h3><p>Diseño web y Historia</p>
-      </div>
-      <div class="team-card reveal reveal-delay-3">
-        <div class="team-avatar"><span>ZR</span></div>
-        <h3>Zaira Ramírez Gómez</h3><p>Ilustración y Animación</p>
-      </div>
-      <div class="team-card reveal reveal-delay-4">
-        <div class="team-avatar"><span>LF</span></div>
-        <h3>Lorena Fernández Alves</h3><p>Campaña y Ilustración</p>
-      </div>
-      <div class="team-card reveal reveal-delay-4">
-        <div class="team-avatar"><span>AC</span></div>
-        <h3>Alberto Corpas Salgado</h3><p>Presentación</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!--FAQ-->
-<section id="faq" style="padding:6rem 1.5rem;">
-  <div class="container-sm">
-    <h2 class="section-title reveal">FAQ</h2>
-    <div class="faq-list">
-      <div class="faq-item reveal reveal-delay-1">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          ¿Cuándo estará disponible?
-          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-answer"><p>Lanzamiento estimado en septiembre 2026 para PC. Demo funcional para mecenas en junio 2026.</p></div>
-      </div>
-      <div class="faq-item reveal reveal-delay-2">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          ¿Hace falta saber filosofía?
-          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-answer"><p>Para nada. La filosofía se integra naturalmente en los personajes y mecánicas. El juego lo explica todo.</p></div>
-      </div>
-      <div class="faq-item reveal reveal-delay-3">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          ¿Qué pasa si no se alcanza el objetivo?
-          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-answer"><p>Todos los patrocinadores reciben reembolso. No se cobra hasta que la campaña concluya con éxito.</p></div>
-      </div>
-      <div class="faq-item reveal reveal-delay-4">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          ¿En qué plataformas saldrá?
-          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-answer"><p>PC (Steam y GOG) confirmado. Según financiación: Nintendo Switch, PlayStation y Xbox.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!--COMENTARIOS-->
-<section id="comentarios" style="padding:6rem 1.5rem; background:hsl(230,12%,10%);">
-  <div class="container-sm">
-    <h2 class="section-title reveal">Comentarios</h2>
-
-    <div class="comment-form reveal">
-      <h3>Deja tu reseña</h3>
-      <input type="text" class="form-field" id="c-nombre" placeholder="Nombre o Alias" />
-      <select class="form-field" id="c-puntos">
-        <option value="5">★★★★★</option>
-        <option value="4">★★★★☆</option>
-        <option value="3">★★★☆☆</option>
-        <option value="2">★★☆☆☆</option>
-        <option value="1">★☆☆☆☆</option>
-      </select>
-      <textarea class="form-field" id="c-mensaje" placeholder="Escribe tu mensaje..."></textarea>
-      <button class="btn-primary" onclick="submitComment()">Enviar</button>
-    </div>
-
-    <div id="comments-list"></div>
-  </div>
-</section>
-
-<!--FOOTER-->
-<footer>
-  <span class="footer-brand">THE ABYSS</span>
-  <ul class="footer-links">
-    <li><a href="#inicio">Inicio</a></li>
-    <li><a href="#campana">Campaña</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="#comentarios">Comentarios</a></li>
-  </ul>
-  <p>© 2026 Zahal Estudios · URJC</p>
-  <small>ATENCIÓN: Campaña ficticia de un videojuego simulado. Práctica de Multimedia, 1º GDDV — Curso 25/26 (Móstoles), URJC.</small>
-</footer>
-
-<!--JAVASCRIPT-->
-<script>
-  /*NAVEGADOR*/
-  const navToggle  = document.getElementById('nav-toggle');
-  const navMobile  = document.getElementById('nav-mobile');
-  const iconMenu   = document.getElementById('icon-menu');
-  const iconClose  = document.getElementById('icon-close');
-  let menuOpen = false;
-
-  navToggle.addEventListener('click', () => {
-    menuOpen = !menuOpen;
-    navMobile.style.display = menuOpen ? 'block' : 'none';
-    iconMenu.style.display  = menuOpen ? 'none'  : 'block';
-    iconClose.style.display = menuOpen ? 'block' : 'none';
-  });
-  function closeMenu() {
-    menuOpen = false;
-    navMobile.style.display = 'none';
-    iconMenu.style.display  = 'block';
-    iconClose.style.display = 'none';
-  }
-
-  /*SECCIÓN DE MAPA*/
-  function activateMap(idx) {
-    document.querySelectorAll('.map-card').forEach((c, i) => {
-      c.classList.toggle('active', i === idx);
-    });
-  }
-
-  /*AUDIO*/
-  const audio   = document.getElementById('audio-el');
-  const seekBar = document.getElementById('seek-bar');
-  const volBar  = document.getElementById('vol-bar');
-  const timeEl  = document.getElementById('audio-time');
-
-  function fmt(s) {
-    const m = Math.floor((s || 0) / 60), sec = Math.floor((s || 0) % 60);
-    return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
-  }
-  function toggleAudio() {
-    if (audio.paused) {
-      audio.play().catch(() => {});
-      document.getElementById('play-icon').style.display  = 'none';
-      document.getElementById('pause-icon').style.display = 'block';
-    } else {
-      audio.pause();
-      document.getElementById('play-icon').style.display  = 'block';
-      document.getElementById('pause-icon').style.display = 'none';
-    }
-  }
-  function seekAudio(val) {
-    if (audio.duration) audio.currentTime = (val / 100) * audio.duration;
-  }
-  function setVolume(val) { audio.volume = val; }
-
-  audio.addEventListener('timeupdate', () => {
-    const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
-    seekBar.value = pct;
-    seekBar.style.background = `linear-gradient(to right, hsl(43,65%,54%) ${pct}%, hsl(230,10%,20%) ${pct}%)`;
-    timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
-  });
-  audio.addEventListener('ended', () => {
-    document.getElementById('play-icon').style.display  = 'block';
-    document.getElementById('pause-icon').style.display = 'none';
-  });
-  volBar.addEventListener('input', (e) => {
-    const v = e.target.value * 100;
-    volBar.style.background = `linear-gradient(to right, hsl(43,65%,54%) ${v}%, hsl(230,10%,20%) ${v}%)`;
-  });
-  seekBar.style.background = `linear-gradient(to right, hsl(43,65%,54%) 0%, hsl(230,10%,20%) 0%)`;
-  volBar.style.background  = `linear-gradient(to right, hsl(43,65%,54%) 100%, hsl(230,10%,20%) 100%)`;
-
-  const GOAL_MAX   = 40000;
-  const RAISED     = 847;
-  const milestones = [
-    { amount:  5000, label: 'Meta minima',    desc: 'Tasa Steam, localizacion ingles, QA/testing y trailer de lanzamiento.' },
-    { amount: 10000, label: 'Doblaje',        desc: 'Actores de voz para cutscenes y videos promocionales.' },
-    { amount: 25000, label: 'Nintendo Switch',desc: 'Porteo a Nintendo Switch (cuenta dev + programacion).' },
-    { amount: 40000, label: 'Capitulo extra', desc: '2.º final jugable, 30 min post-creditos y port a PlayStation.' },
-  ];
-
-  let currentRaised = RAISED;
-
-  const barTrack  = document.getElementById('bar-track');
-  const barFill   = document.getElementById('bar-fill');
-  const barHandle = document.getElementById('bar-handle');
-  const labelsTop = document.getElementById('labels-top');
-  const labelsBot = document.getElementById('labels-bot');
-  const msGrid    = document.getElementById('milestone-grid');
-
-  milestones.forEach(m => {
-    const pos = (m.amount / GOAL_MAX) * 100;
-
-    const top = document.createElement('span');
-    top.textContent = m.amount >= 1000 ? `${m.amount/1000}K€` : `${m.amount}€`;
-    top.style.left = pos + '%';
-    top.id = `label-top-${m.amount}`;
-    labelsTop.appendChild(top);
-
-    const bot = document.createElement('span');
-    bot.textContent = m.label;
-    bot.style.left = pos + '%';
-    bot.id = `label-bot-${m.amount}`;
-    labelsBot.appendChild(bot);
-
-    const tick = document.createElement('div');
-    tick.className = 'bar-tick';
-    tick.style.left = pos + '%';
-    tick.id = `tick-${m.amount}`;
-    barTrack.appendChild(tick);
-
-    const card = document.createElement('div');
-    card.className = 'milestone-card';
-    card.id = `mcard-${m.amount}`;
-    card.innerHTML = `
-      <div class="milestone-card-top">
-        <span class="amount">${m.amount.toLocaleString('es-ES')}€</span>
-        <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <svg class="unlock-icon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
-      </div>
-      <h3>${m.label}</h3>
-      <p>${m.desc}</p>`;
-    msGrid.appendChild(card);
-  });
-
-  function updateBar(raised) {
-    const pct = Math.min((raised / GOAL_MAX) * 100, 100);
-    barFill.style.width  = pct + '%';
-    barHandle.style.left = pct + '%';
-
-    // actualiza el contador de euros recaudados en tiempo real
-    document.getElementById('badge-raised').textContent =
-      Math.round(raised).toLocaleString('es-ES') + '€';
-
-    milestones.forEach(m => {
-      const unlocked = raised >= m.amount;
-      const gold = 'hsl(43,65%,54%)';
-      const dim  = 'rgba(125,134,168,0.5)';
-
-      document.getElementById(`label-top-${m.amount}`).style.color = unlocked ? gold : dim;
-      document.getElementById(`label-bot-${m.amount}`).style.color = unlocked ? 'rgba(237,232,214,0.6)' : 'rgba(125,134,168,0.35)';
-      document.getElementById(`tick-${m.amount}`).style.background = unlocked ? gold : 'var(--border)';
-
-      const card = document.getElementById(`mcard-${m.amount}`);
-      card.classList.toggle('unlocked', unlocked);
-      card.querySelector('.lock-icon').style.display   = unlocked ? 'none'  : 'block';
-      card.querySelector('.unlock-icon').style.display = unlocked ? 'block' : 'none';
-    });
-  }
-
-  function getValueFromX(clientX) {
-    const rect  = barTrack.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    return Math.round(ratio * GOAL_MAX);
-  }
-
-  barTrack.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    currentRaised = getValueFromX(e.clientX);
-    updateBar(currentRaised);
-    const onMove = (ev) => { currentRaised = getValueFromX(ev.clientX); updateBar(currentRaised); };
-    const onUp   = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-  });
-  barTrack.addEventListener('touchstart', (e) => {
-    currentRaised = getValueFromX(e.touches[0].clientX);
-    updateBar(currentRaised);
-    const onMove = (ev) => { currentRaised = getValueFromX(ev.touches[0].clientX); updateBar(currentRaised); };
-    const onEnd  = () => { window.removeEventListener('touchmove', onMove); window.removeEventListener('touchend', onEnd); };
-    window.addEventListener('touchmove', onMove);
-    window.addEventListener('touchend', onEnd);
-  });
-
-  updateBar(RAISED);
-
-  /*FAQ*/
-  function toggleFaq(btn) {
-    const item = btn.closest('.faq-item');
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
-  }
-
-  /*COMENTARIOS*/
-  function submitComment() {
-    const nombre = document.getElementById('c-nombre').value.trim();
-    const msg    = document.getElementById('c-mensaje').value.trim();
-    const pts    = parseInt(document.getElementById('c-puntos').value);
-    if (!nombre || !msg) return;
-
-    const stars = '★'.repeat(pts) + '☆'.repeat(5 - pts);
-    const card  = document.createElement('div');
-    card.className = 'comment-card';
-    card.innerHTML = `
-      <div class="comment-card-top">
-        <span class="name">${escHtml(nombre)}</span>
-        <span class="stars">${stars}</span>
-      </div>
-      <blockquote>"${escHtml(msg)}"</blockquote>`;
-    document.getElementById('comments-list').prepend(card);
-
-    document.getElementById('c-nombre').value  = '';
-    document.getElementById('c-mensaje').value = '';
-    document.getElementById('c-puntos').value  = '5';
-  }
-  function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  /*SCROLL QUE REBELA*/
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
+    <p>© 2026 Zahal Estudios . URJC</p>
+    <small>ATENCIÓN: Campaña ficticia de un videojuego simulado. Práctica de Multimedia, 1º GDDV. Curso 25/26
+      (Móstoles), URJC.</small>
+  </footer>
+  <!-- Script directo a un js externo -->
+  <script src="script.js"></script>
 </body>
+
 </html>
