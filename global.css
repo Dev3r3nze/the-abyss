@@ -473,7 +473,7 @@ button {
 #campana {
   padding: 6rem 1.5rem;
 }
-.video-placeholder {
+.video-el {
   width: 100%;
   aspect-ratio: 16/9;
   background: hsla(230, 10%, 16%, 0.3);
